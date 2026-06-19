@@ -27,8 +27,18 @@ function Home() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    alert(searchQuery);
-    setSearchQuery("");
+    if (!searchQuery.trim()) return;
+    setLoading(true);
+    try {
+      const results = await searchMovies(searchQuery);
+      setMovies(results);
+      setError(null);
+    } catch (err) {
+      console.log(err);
+      setError("Failed to search movies...");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -54,5 +64,8 @@ function Home() {
         ))}
   </div>
   )}
+  </div>
+  );
+}
 
 export default Home;
